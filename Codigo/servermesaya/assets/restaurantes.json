@@ -1,0 +1,114 @@
+[
+  {
+    "id": 1,
+    "nombre": "Ca Saoret",
+    "categoria": "Restaurante",
+    "valoracion": 4.7,
+    "rango_precios": "10€ - 20€",
+    "horario": {
+                "lunes": {"apertura": "CERRADO", "cierre": "CERRADO"},
+                "martes": {"apertura": "CERRADO", "cierre": "CERRADO"},
+                "miércoles": {"apertura": "08:00", "cierre": "16:00"},
+                "jueves": {"apertura": "08:00", "cierre": "16:00"},
+                "viernes": {"apertura": "08:00", "cierre": "16:00"},
+                "sábado":[{"apertura": "08:00", "cierre": "16:00"},
+                          {"apertura": "20:00", "cierre": "24:00"}],
+                "domingo": {"apertura": "08:00", "cierre": "16:00"}
+              },
+    "telefono": "+34 962 83 71 85",
+    "direccion": "Carrer Carnisseria 24, Tavernes de la Valldigna",
+    "latitud": 39.071322, 
+    "longitud": -0.26727,
+    "imagen": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4npVkcf8BPVlMnNleBWzpZfBjaeMOryxUenZlVwJ_AC1yDv8X-yC8ne1_pnO47GamwU5K25zA7LNvujaN6zGoXLP0BboDUdrr4x3HQvdIxZ1uh5TzbiRO8Bfhi-Cu9flsPtJkQ055Q=s680-w680-h510-rw"
+  },
+  {
+    "id": 2,
+    "nombre": "Ca Ángel",
+    "categoria": "Bar",
+    "valoracion": 4.4,
+    "rango_precios": "10€ - 20€",
+    "horario": {
+      "lunes": {"apertura": "06:00", "cierre": "21:00"},
+      "martes": {"apertura": "06:00", "cierre": "21:00"},
+      "miércoles": {"apertura": "06:00", "cierre": "21:00"},
+      "jueves": {"apertura": "06:00", "cierre": "21:00"},
+      "viernes": {"apertura": "06:00", "cierre": "21:00"},
+      "sábado": {"apertura": "06:00", "cierre": "14:00"},
+      "domingo": {"apertura": "06:00", "cierre": "14:00"}
+    },
+    "telefono": "+34 622 02 14 76",
+    "direccion": "Carrer Marjaletes 6, Tavernes de la Valldigna",
+    "latitud": 39.07388,
+    "longitud": -0.26024,
+    "imagen": "https://lh3.googleusercontent.com/gps-cs-s/AC9h4npAy_S_aZRk9FSYEC7_SvH93Zm_mcoMj5oZ2M7UU1lNdRSFzp21PQiG9X3wRvADWOdz8o1v9S8QDj0PoS4u5cBxhuwv6z-UokknH7RR2dplip2VFKVppAKzELaRAuhcMQpw8MQ=s680-w680-h510-rw"
+  },
+  {
+    "id": 3,
+    "nombre": "The Black Burguer",
+    "categoria": "Hamburguesería",
+    "valoracion": 4.7,
+    "rango_precios": "10€ - 20€",
+    "horario": {
+                "lunes": [{"apertura": "09:00", "cierre": "16:00"},
+                          {"apertura": "19:00", "cierre": "23:00"}],
+                "martes": {"apertura": "CERRADO", "cierre": "CERRADO"},
+                "miércoles": [{"apertura": "09:00", "cierre": "16:00"},
+                          {"apertura": "19:00", "cierre": "23:00"}],
+                "jueves": [{"apertura": "09:00", "cierre": "16:00"},
+                          {"apertura": "19:00", "cierre": "23:00"}],
+                "viernes": [{"apertura": "09:00", "cierre": "16:00"},
+                          {"apertura": "19:00", "cierre": "23:00"}],
+                "sábado":[{"apertura": "09:00", "cierre": "16:00"},
+                          {"apertura": "19:00", "cierre": "23:00"}],
+                "domingo": [{"apertura": "09:00", "cierre": "16:00"},
+                          {"apertura": "19:00", "cierre": "23:00"}]
+              },
+    "telefono": "+34 622 30 48 98",
+    "direccion": "Plaça Major 14,Tavernes de la Valldigna",
+    "latitud": 39.07232,
+    "longitud": -0.26736,
+    "imagen": "https://lh3.googleusercontent.com/p/AF1QipOgpvaTNGdIcSKNolygC_p98qpMV-zHkIrwQk1g=s680-w680-h510-rw"
+  },
+  {
+    "id": 4,
+    "nombre": "FLIPPA'S - Pizzería Napolitana Ruzafa",
+    "categoria": "Pizzería",
+    "valoracion": 4.6,
+    "rango_precios": "10€ - 20€",
+    "horario": {
+                "lunes": {"apertura": "CERRADO", "cierre": "CERRADO"},
+                "martes": {"apertura": "19:00", "cierre": "0:30"},
+                "miércoles": {"apertura": "19:00", "cierre": "0:30"},
+                "jueves": {"apertura": "19:00", "cierre": "0:30"},
+                "viernes": {"apertura": "13:30", "cierre": "1:00"},
+                "sábado": {"apertura": "13:30", "cierre": "1:00"},
+                "domingo": {"apertura": "13:30", "cierre": "1:00"}
+              },
+    "telefono": "+34 657 19 08 04",
+    "direccion": "Carrer de Sueca, 45, L'Eixample, València",
+    "latitud": 39.46684,
+    "longitud": -0.37469,
+    "imagen": "https://lh3.googleusercontent.com/p/AF1QipN3VjglweenX_LhP6Mw_0bl3pNI6NYCaFf2GqtO=w408-h544-k-no"
+  },
+  {
+    "id": 5,
+    "nombre": "Restaurante Víctor",
+    "categoria": "Restaurante",
+    "valoracion": 4.2,
+    "rango_precios": "20€ - 30€",
+    "horario": {
+                "lunes": {"apertura": "CERRADO", "cierre": "CERRADO"},
+                "martes": {"apertura": "7:00", "cierre": "23:00"},
+                "miércoles": {"apertura": "7:00", "cierre": "23:00"},
+                "jueves": {"apertura": "7:00", "cierre": "23:00"},
+                "viernes": {"apertura": "7:00", "cierre": "23:00"},
+                "sábado": {"apertura": "7:00", "cierre": "24:00"},
+                "domingo": {"apertura": "7:00", "cierre": "23:00"}
+              },
+    "telefono": "+34 962 82 15 77",
+    "direccion": "Tavernes de la Valldigna, 236, Tavernes de la Valldigna",
+    "latitud": 39.07837,
+    "longitud": -0.24359,
+    "imagen": "https://lh3.googleusercontent.com/p/AF1QipPZKrsKBb5TA5zZNaxch32fVSuR0r5E4gI0Vs96=s680-w680-h510-rw"
+  }
+]

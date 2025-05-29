@@ -1,0 +1,1 @@
+/home/adrian/Escritorio/TFG_Bueno/Codigo/appmesaya/build/app/intermediates/cxx/Debug/13156b28/obj/arm64-v8a
