@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Bienvenido a MesaYa(Sin Login)',
+          'Bienvenido a MesaYa',
           style: TextStyle(
             fontSize: 30.0,
             fontWeight: FontWeight.bold,

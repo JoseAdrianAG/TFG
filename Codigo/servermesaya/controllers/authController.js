@@ -4,9 +4,6 @@ import { registerUser, authenticateUser } from '../models/users.js';
 // Llibreria per a les variables d'entorn
 import dotenv from 'dotenv';
 
-// Definim una clau secreta per signar els tokens
-// const SECRET_KEY = 'Aquesta_no_es_una_bona_manera_de_guardar_la_clau_secreta';
-
 // Aquesta és la forma correcta d'accedir a les claus secretes
 dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY;
