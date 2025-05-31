@@ -27,8 +27,7 @@ class _BuscadorScreenState extends State<BuscadorScreen> {
     {'icon': Icons.local_dining, 'text': 'Restaurante'},
     {'icon': Icons.fastfood, 'text': 'Hamburguesería'},
     {'icon': Icons.local_pizza, 'text': 'Pizzería'},
-    {'icon': Icons.ramen_dining, 'text': 'Asiatico'},
-    {'icon': Icons.location_on, 'text': 'Cerca de mi'},
+    {'icon': Icons.euro, 'text': 'Economico'},
   ];
 
   @override
