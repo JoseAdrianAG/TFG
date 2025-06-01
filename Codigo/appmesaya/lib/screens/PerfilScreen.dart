@@ -1,4 +1,5 @@
 import 'package:appmesaya/screens/BuscadorScreen.dart';
+import 'package:appmesaya/screens/EditarPerfilScreen.dart';
 import 'package:appmesaya/screens/FavoritosScreen.dart';
 import 'package:appmesaya/screens/HomeScreen.dart';
 import 'package:appmesaya/screens/LoginScreen.dart';
@@ -152,8 +153,18 @@ class _PerfilScreenState extends State<PerfilScreen> {
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton.icon(
-                        onPressed: () {
-                          // Acción para editar perfil
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  EditarPerfilScreen(username: _username),
+                            ),
+                          );
+                          // Recarga los datos del perfil cuando vuelves
+                          if (result == true) {
+                            await _loadUserProfile();
+                          }
                         },
                         icon: const Icon(Icons.edit),
                         label: const Text("Editar perfil"),
@@ -165,13 +176,6 @@ class _PerfilScreenState extends State<PerfilScreen> {
                       const SizedBox(height: 30),
                       const Divider(),
                       ListTile(
-                        leading: const Icon(Icons.settings),
-                        title: const Text("Configuración"),
-                        onTap: () {
-                          // Acción configuración
-                        },
-                      ),
-                      ListTile(
                         leading: const Icon(Icons.logout),
                         title: const Text("Cerrar sesión"),
                         onTap: _logout,
@@ -180,18 +184,31 @@ class _PerfilScreenState extends State<PerfilScreen> {
                   ),
                 ),
       bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Inicio',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Buscador',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Reservas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favoritos',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Perfil',
+          ),
+        ],
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscador'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), label: 'Reservas'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: 'Favoritos'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
-        ],
       ),
     );
   }

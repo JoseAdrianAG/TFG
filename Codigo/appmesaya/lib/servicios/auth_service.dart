@@ -48,4 +48,39 @@ class AuthService {
       throw Exception('Error de conexión: $e');
     }
   }
+
+  static Future<void> actualizarPerfil({
+    required String username,
+    String? password,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    if (token == null) throw Exception('No autenticado');
+
+    final client = HttpClient()
+      ..badCertificateCallback = ((cert, host, port) => true);
+
+    final request = await client.putUrl(
+      Uri.parse('https://10.0.2.2:3000/auth/update'),
+    );
+    request.headers.set('Authorization', 'Bearer $token');
+    request.headers.set('Content-Type', 'application/json');
+
+    final body = {
+      'nombre': username,
+      if (password != null && password.isNotEmpty) 'contraseña': password,
+    };
+
+    request.write(jsonEncode(body));
+    final response = await request.close();
+
+    if (response.statusCode != 200) {
+      final resp = await response.transform(utf8.decoder).join();
+      throw Exception('Error al actualizar perfil: $resp');
+    }
+
+    // Actualiza el nombre en SharedPreferences
+    await prefs.setString(
+        'username', username); // Cambia 'nombre' por 'username'
+  }
 }

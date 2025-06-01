@@ -67,7 +67,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
           context,
           MaterialPageRoute(builder: (context) => ReservasScreen()),
         );
-        return; // Retornamos para no actualizar el índice
+        return;
       case 3:
         // Ya estamos en Favoritos, no necesitamos hacer nada
         return;
@@ -76,7 +76,7 @@ class _FavoritosScreenState extends State<FavoritosScreen> {
           context,
           MaterialPageRoute(builder: (context) => PerfilScreen()),
         );
-        return; // Retornamos para no actualizar el índice
+        return;
     }
     setState(() {
       _currentIndex = index;

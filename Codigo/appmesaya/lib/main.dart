@@ -18,7 +18,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xFFFFF3E0),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.orange,
+          foregroundColor: Colors.white,
+        ),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xFFFF7A00),
+          primary: Color(0xFFFF7A00),
+          secondary: Color(0xFFFECE91),
+        ),
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(color: Color(0xFF3E2723)),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFFFF8C42),
+            foregroundColor: Colors.white,
+          ),
+        ),
+      ),
+
       home: const HomeScreen(), // Define la pantalla inicial aquí
       routes: {
         '/home': (context) => const HomeScreen(),

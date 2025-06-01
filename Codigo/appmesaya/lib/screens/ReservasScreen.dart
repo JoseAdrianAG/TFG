@@ -105,6 +105,7 @@ class _ReservasScreenState extends State<ReservasScreen> {
         );
         return;
       case 2:
+        // Ya estamos en Reservas, no necesitamos hacer nada
         return;
       case 3:
         Navigator.pushReplacement(
@@ -160,18 +161,31 @@ class _ReservasScreenState extends State<ReservasScreen> {
               },
             ),
       bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Inicio',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Buscador',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Reservas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favoritos',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Perfil',
+          ),
+        ],
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscador'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), label: 'Reservas'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: 'Favoritos'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
-        ],
       ),
     );
   }

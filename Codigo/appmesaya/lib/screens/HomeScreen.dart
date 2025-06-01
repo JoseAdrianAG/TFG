@@ -93,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     switch (index) {
       case 0:
+        // Ya estamos en Home, no necesitamos hacer nada
         return;
       case 1:
         Navigator.pushReplacement(
@@ -176,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     width: 140.0,
                     decoration: BoxDecoration(
-                      color: Colors.blueAccent,
+                      color: Colors.orange,
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: Column(
@@ -231,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     width: 140.0,
                     decoration: BoxDecoration(
-                      color: Colors.deepPurple,
+                      color: Colors.orange,
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: Column(
@@ -266,18 +267,31 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Inicio',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Buscador',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Reservas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favoritos',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Perfil',
+          ),
+        ],
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscador'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), label: 'Reservas'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: 'Favoritos'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
-        ],
       ),
     );
   }

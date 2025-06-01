@@ -16,9 +16,7 @@ class BuscadorScreen extends StatefulWidget {
 
 class _BuscadorScreenState extends State<BuscadorScreen> {
   final TextEditingController _searchController = TextEditingController();
-  bool _isSearching = false;
   int _currentIndex = 1;
-
   List<dynamic> _restaurantes = [];
   List<dynamic> _filtrados = [];
 
@@ -27,7 +25,7 @@ class _BuscadorScreenState extends State<BuscadorScreen> {
     {'icon': Icons.local_dining, 'text': 'Restaurante'},
     {'icon': Icons.fastfood, 'text': 'Hamburguesería'},
     {'icon': Icons.local_pizza, 'text': 'Pizzería'},
-    {'icon': Icons.euro, 'text': 'Economico'},
+    {'icon': Icons.euro, 'text': 'Económico'},
   ];
 
   @override
@@ -38,16 +36,16 @@ class _BuscadorScreenState extends State<BuscadorScreen> {
 
   Future<void> _fetchRestaurantes() async {
     HttpClient client = HttpClient()
-      ..badCertificateCallback =
-          ((X509Certificate cert, String host, int port) => true);
+      ..badCertificateCallback = ((_, __, ___) => true);
+
     try {
       final request =
           await client.getUrl(Uri.parse('https://10.0.2.2:3000/restaurantes'));
       final response = await request.close();
 
       if (response.statusCode == 200) {
-        final responseBody = await response.transform(utf8.decoder).join();
-        final List<dynamic> data = jsonDecode(responseBody);
+        final body = await response.transform(utf8.decoder).join();
+        final List<dynamic> data = jsonDecode(body);
         setState(() {
           _restaurantes = data;
           _filtrados = data;
@@ -69,6 +67,9 @@ class _BuscadorScreenState extends State<BuscadorScreen> {
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
         );
+        return;
+      case 1:
+        // Ya estamos en Buscador, no necesitamos hacer nada
         return;
       case 2:
         Navigator.pushReplacement(
@@ -94,22 +95,50 @@ class _BuscadorScreenState extends State<BuscadorScreen> {
     });
   }
 
+  void _filtrarPorBusqueda(String query) {
+    setState(() {
+      _filtrados = _restaurantes.where((r) {
+        final nombre = r['nombre']?.toLowerCase() ?? '';
+        final categoria = r['categoria']?.toLowerCase() ?? '';
+        return nombre.contains(query.toLowerCase()) ||
+            categoria.contains(query.toLowerCase());
+      }).toList();
+    });
+  }
+
+  void _filtrarPorCategoria(String categoria) {
+    setState(() {
+      if (categoria.toLowerCase() == 'económico') {
+        _filtrados = _restaurantes.where((r) {
+          final rango = r['rango_precios']?.replaceAll('€', '') ?? '';
+          final partes = rango.split('-');
+          if (partes.length == 2) {
+            final min = int.tryParse(partes[0].trim()) ?? 0;
+            final max = int.tryParse(partes[1].trim()) ?? 0;
+            return min >= 10 && max <= 20;
+          }
+          return false;
+        }).toList();
+      } else {
+        _filtrados = _restaurantes
+            .where((r) => (r['categoria']?.toLowerCase() ?? '')
+                .contains(categoria.toLowerCase()))
+            .toList();
+      }
+    });
+  }
+
   void _showRandomRestaurant() {
-    final randomRestaurant = (_filtrados..shuffle()).first;
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Restaurante Sugerido'),
-          content: Text(randomRestaurant['nombre']),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cerrar'),
-            ),
-          ],
-        );
-      },
+    if (_filtrados.isEmpty) return;
+
+    final random = (_filtrados..shuffle()).first;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => DetalleRestauranteScreen(
+          restauranteId: random['id'],
+        ),
+      ),
     );
   }
 
@@ -117,126 +146,102 @@ class _BuscadorScreenState extends State<BuscadorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Buscador',
-          style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Buscador',
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12),
             child: TextField(
               controller: _searchController,
-              onChanged: (value) {
-                final query = value.toLowerCase();
-                setState(() {
-                  _filtrados = _restaurantes.where((r) {
-                    final nombre = r['nombre']?.toLowerCase() ?? '';
-                    final categoria = r['categoria']?.toLowerCase() ?? '';
-                    return nombre.contains(query) || categoria.contains(query);
-                  }).toList();
-                });
-              },
+              onChanged: _filtrarPorBusqueda,
               decoration: InputDecoration(
+                hintText: 'Buscar por nombre o tipo...',
                 prefixIcon: const Icon(Icons.search),
-                hintText: 'Nombre de Restaurante, tipo de comida...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
               ),
             ),
           ),
           const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('¿Qué deseas comer hoy?',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+            padding: EdgeInsets.symmetric(horizontal: 12.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Filtrar por categoría:',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
           ),
           SizedBox(
-            height: 120.0,
+            height: 100,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               itemCount: _circleData.length,
-              itemBuilder: (context, index) {
-                final item = _circleData[index];
+              itemBuilder: (_, i) {
+                final item = _circleData[i];
                 return GestureDetector(
-                  onTap: () {
-                    final categoria = item['text'].toLowerCase();
-                    setState(() {
-                      _filtrados = _restaurantes
-                          .where((r) => (r['categoria']?.toLowerCase() ?? '')
-                              .contains(categoria))
-                          .toList();
-                    });
-                  },
+                  onTap: () => _filtrarPorCategoria(item['text']),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Container(
-                      width: 100.0,
-                      decoration: BoxDecoration(
-                        color: Colors.blueAccent,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(item['icon'], color: Colors.white, size: 35.0),
-                            Text(
-                              item['text'],
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.orange.shade400,
+                          child: Icon(item['icon'], color: Colors.white),
                         ),
-                      ),
+                        const SizedBox(height: 6),
+                        Text(item['text'],
+                            style: const TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.w500))
+                      ],
                     ),
                   ),
                 );
               },
             ),
           ),
+          const Divider(height: 20),
           Expanded(
-            child: ListView.builder(
-              itemCount: _filtrados.length,
-              itemBuilder: (context, index) {
-                final r = _filtrados[index];
-                return ListTile(
-                  title: Text(r['nombre']),
-                  subtitle: Text(r['categoria']),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => DetalleRestauranteScreen(
-                          restauranteId: r['id'],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('¿No sabes qué elegir?',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+            child: _filtrados.isEmpty
+                ? const Center(child: Text('No se encontraron resultados.'))
+                : ListView.builder(
+                    itemCount: _filtrados.length,
+                    itemBuilder: (_, index) {
+                      final r = _filtrados[index];
+                      return ListTile(
+                        leading: const Icon(Icons.restaurant),
+                        title: Text(r['nombre']),
+                        subtitle: Text(r['categoria']),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => DetalleRestauranteScreen(
+                                  restauranteId: r['id']),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.all(12.0),
             child: Row(
               children: [
-                const Text('Sorpréndeme', style: TextStyle(fontSize: 16.0)),
-                IconButton(
+                const Icon(Icons.casino, color: Colors.blueAccent),
+                const SizedBox(width: 8),
+                const Text('¿No sabes qué elegir?',
+                    style: TextStyle(fontSize: 16)),
+                const Spacer(),
+                ElevatedButton.icon(
                   onPressed: _showRandomRestaurant,
-                  icon: const Icon(Icons.casino),
-                )
+                  icon: const Icon(Icons.shuffle),
+                  label: const Text('Sorpréndeme'),
+                ),
               ],
             ),
           ),

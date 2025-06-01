@@ -96,20 +96,31 @@ class _LoginScreenState extends State<LoginScreen> {
       'password': _passwordController.text.trim(),
     };
 
+    if (loginData['username']!.isEmpty || loginData['password']!.isEmpty) {
+      setState(() {
+        _errorMessage = 'Por favor, completa todos los campos.';
+        _isLoading = false;
+      });
+      return;
+    }
+    setState(() {
+      _errorMessage = null;
+    });
+
     try {
       final response = await _makePostRequest(url, loginData);
       if (response == null) {
-        throw Exception('No se pudo conectar con el servidor.');
+        throw ('Error al conectar con el servidor.');
       }
 
       final data = jsonDecode(response);
       if (data.containsKey('token')) {
         String token = data['token'];
-        int userId = data['id']; // <- asegúrate de que el backend lo devuelve
+        int userId = data['id'];
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
-        await prefs.setInt('usuario_id', userId); // <- esto es lo que faltaba
+        await prefs.setInt('usuario_id', userId);
         await prefs.setString('username', _usernameController.text.trim());
 
         if (mounted) {
@@ -119,13 +130,15 @@ class _LoginScreenState extends State<LoginScreen> {
               context, MaterialPageRoute(builder: (context) => HomeScreen()));
         }
       } else {
-        throw Exception(data['error'] ?? 'Error de autenticación');
+        final mensaje = data['error'] ?? 'Error desconocido al iniciar sesión.';
+        throw Exception('Inicio de sesión fallido: $mensaje');
       }
     } catch (e) {
       print('Error en login: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('$e')));
+        setState(() {
+          _errorMessage = e.toString().replaceAll('Exception: ', '');
+        });
       }
     }
 
@@ -147,8 +160,9 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response.statusCode == 200) {
         return await response.transform(utf8.decoder).join();
       } else {
-        print('Error en la solicitud: ${response.statusCode}');
-        return null;
+        final errorText = await response.transform(utf8.decoder).join();
+        print('Error en la solicitud: $errorText');
+        return errorText;
       }
     } catch (e) {
       print('Error de conexión: $e');
@@ -163,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Perfil',
+          'Mi Perfil',
           style: TextStyle(
             fontSize: 30.0,
             fontWeight: FontWeight.bold,
@@ -221,49 +235,40 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 24.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: _isLoading ? null : _handleLogin,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              foregroundColor: Colors.white,
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 12.0),
-                            ),
-                            child: const Text('Iniciar Sesión'),
-                          ),
-                        ),
-                        const SizedBox(width: 16.0),
-                        const Text(
-                          '¿Aun no tienes cuenta?',
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                        const SizedBox(width: 16.0),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: _isLoading
-                                ? null
-                                : () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const RegistroScreen()),
-                                    );
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              foregroundColor: Colors.white,
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 12.0),
-                            ),
-                            child: const Text('Registrarse'),
-                          ),
-                        ),
-                      ],
+                    ElevatedButton(
+                      onPressed: _isLoading ? null : _handleLogin,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      ),
+                      child: const Text('Iniciar Sesión'),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Center(
+                      child: Text(
+                        '¿Aún no tienes cuenta?',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    ElevatedButton(
+                      onPressed: _isLoading
+                          ? null
+                          : () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const RegistroScreen()),
+                              );
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      ),
+                      child: const Text('Registrarse'),
                     ),
                   ],
                 ),

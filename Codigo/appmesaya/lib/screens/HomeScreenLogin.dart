@@ -71,25 +71,25 @@ class _HomeScreenLoginState extends State<HomeScreenLogin> {
           context,
           MaterialPageRoute(builder: (context) => BuscadorScreen()),
         );
-        return; // Retornamos para no actualizar el índice
+        return;
       case 2:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => ReservasScreen()),
         );
-        return; // Retornamos para no actualizar el índice
+        return;
       case 3:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => FavoritosScreen()),
         );
-        return; // Retornamos para no actualizar el índice
+        return;
       case 4:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => PerfilScreen()),
         );
-        return; // Retornamos para no actualizar el índice
+        return;
     }
     setState(() {
       _currentIndex = index;
@@ -152,7 +152,7 @@ class _HomeScreenLoginState extends State<HomeScreenLogin> {
                     child: Container(
                       width: 140.0,
                       decoration: BoxDecoration(
-                        color: Colors.blueAccent,
+                        color: Colors.orange,
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Column(
@@ -215,7 +215,7 @@ class _HomeScreenLoginState extends State<HomeScreenLogin> {
                     child: Container(
                       width: 140.0,
                       decoration: BoxDecoration(
-                        color: Colors.deepPurple,
+                        color: Colors.orange,
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Column(

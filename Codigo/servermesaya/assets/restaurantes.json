@@ -110,5 +110,31 @@
     "latitud": 39.07837,
     "longitud": -0.24359,
     "imagen": "https://lh3.googleusercontent.com/p/AF1QipPZKrsKBb5TA5zZNaxch32fVSuR0r5E4gI0Vs96=s680-w680-h510-rw"
+  },
+  {
+    "id": 6,
+    "nombre": "El Asombro Garden Grill",
+    "categoria": "Restaurante",
+    "valoracion": 4.6,
+    "rango_precios": "30€ - 50€",
+    "horario": {
+                "lunes": {"apertura": "CERRADO", "cierre": "CERRADO"},
+                "martes": [{"apertura": "13:30", "cierre": "17:00"},
+                          {"apertura": "21:00", "cierre": "24:00"}],
+                "miércoles": [{"apertura": "13:30", "cierre": "17:00"},
+                          {"apertura": "21:00", "cierre": "24:00"}],
+                "jueves": [{"apertura": "13:30", "cierre": "17:00"},
+                          {"apertura": "21:00", "cierre": "24:00"}],
+                "viernes": [{"apertura": "13:30", "cierre": "17:00"},
+                          {"apertura": "21:00", "cierre": "24:00"}],
+                "sábado": [{"apertura": "13:30", "cierre": "17:00"},
+                          {"apertura": "21:00", "cierre": "24:00"}],
+                "domingo": {"apertura": "13:30", "cierre": "17:00"}
+              },
+    "telefono": "+34 666 15 78 68",
+    "direccion": "Carrer Senill, 21, Platja de Gandia",
+    "latitud": 39.01122,
+    "longitud": -0.17510,
+    "imagen": "https://lh3.googleusercontent.com/p/AF1QipPoNomqqZX6RHjcZbymYL7mU_I30ZJE5JGb9pE0=s680-w680-h510-rw"
   }
 ]

@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login } from '../controllers/authController.js';
+import { register, login, updatePerfil } from '../controllers/authController.js';
 import { authenticateToken } from '../middlewares/authMiddleware.js';
 
 // Creem el router
@@ -8,6 +8,7 @@ const router = express.Router();
 // Configurem les rutes d'autenticació
 router.post('/register', register);
 router.post('/login', login);
+router.put('/update', authenticateToken, updatePerfil)
 
 // Creem unaruta protegida d'exemple
 // Abans de passar al middleware que gestiona aqueta petició (el res.send), 

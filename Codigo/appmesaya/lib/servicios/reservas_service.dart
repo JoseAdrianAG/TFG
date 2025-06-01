@@ -184,4 +184,32 @@ class ReservasService {
       client.close();
     }
   }
+
+  // Obtine las horas disponibles para un restaurante en una fecha específica
+  static Future<List<String>> obtenerHorasDisponibles(
+      int restauranteId, DateTime fecha) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final formattedDate = DateFormat('yyyy-MM-dd').format(fecha);
+
+    final url = Uri.parse(
+        'https://10.0.2.2:3000/restaurantes/$restauranteId/horarios?fecha=$formattedDate');
+
+    final client = HttpClient()
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
+
+    final request = await client.getUrl(url);
+    request.headers.set('Authorization', 'Bearer $token');
+
+    final response = await request.close();
+    final body = await response.transform(utf8.decoder).join();
+    client.close();
+
+    if (response.statusCode == 200) {
+      return List<String>.from(jsonDecode(body));
+    } else {
+      throw Exception('Error al obtener horas disponibles');
+    }
+  }
 }

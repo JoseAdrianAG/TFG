@@ -60,19 +60,18 @@ class _RegistroScreenState extends State<RegistroScreen> {
   }
 
   Future<void> _handleRegister() async {
-    // Validar campos
-    if (_usernameController.text.trim().isEmpty) {
-      setState(() => _errorMessage = 'El nombre de usuario es obligatorio');
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+
+    if (username.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      setState(() =>
+          _errorMessage = 'Por favor, completa todos los campos obligatorios.');
       return;
     }
 
-    if (_passwordController.text.isEmpty) {
-      setState(() => _errorMessage = 'La contraseña es obligatoria');
-      return;
-    }
-
-    if (_passwordController.text != _confirmPasswordController.text) {
-      setState(() => _errorMessage = 'Las contraseñas no coinciden');
+    if (password != confirmPassword) {
+      setState(() => _errorMessage = 'Las contraseñas no coinciden.');
       return;
     }
 
@@ -91,26 +90,36 @@ class _RegistroScreenState extends State<RegistroScreen> {
       request.headers.set('content-type', 'application/json');
 
       request.write(jsonEncode({
-        'username': _usernameController.text,
-        'password': _passwordController.text,
+        'username': username,
+        'password': password,
       }));
 
       final response = await request.close();
       final responseBody = await response.transform(utf8.decoder).join();
+
       final data = jsonDecode(responseBody);
 
       if (response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-                'Registro completado correctamente, por favor inicie sesión')));
-        Navigator.pop(context); // Volver a la pantalla de login
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text(
+                    'Registro completado correctamente. Por favor, inicia sesión.')),
+          );
+          Navigator.pop(context);
+        }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(data['error'] ?? 'Error en el registro')));
+        final error = data['error'] ?? 'No se pudo completar el registro.';
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error)));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Error de conexion')));
+      print('Error en el registro: $e');
+      if (mounted) {
+        setState(() {
+          _errorMessage = 'Error al conectar con el servidor.';
+        });
+      }
     }
 
     setState(() => _isLoading = false);

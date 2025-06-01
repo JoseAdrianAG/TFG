@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { registerUser, authenticateUser } from '../models/users.js';
-
+import bcrypt from 'bcrypt';
+import { pool } from '../models/db.js';
 // Llibreria per a les variables d'entorn
 import dotenv from 'dotenv';
 
@@ -33,7 +34,7 @@ export const login = async (req, res) => {
     console.log("Resultado autenticación:", user ? "Exitoso" : "Fallido");
     
     if (!user) {
-      return res.status(401).send({ error: 'Credencials incorrectes' });
+      return res.status(401).send({ error: 'Usuario o contraseña incorrectos' });
     }
 
     const token = jwt.sign({ 
@@ -57,5 +58,46 @@ export const getProfile = async (req, res) => {
       });
   } catch (err) {
       res.status(500).send({ error: 'Error al obtener el perfil' });
+  }
+};
+
+// Actualizar datos de usuario
+export const updatePerfil = async (req, res) => {
+  const { nombre, contraseña } = req.body;
+  const userId = req.user.id;
+
+  if (!nombre && !contraseña) {
+    return res.status(400).json({ error: 'Nada que actualizar' });
+  }
+
+  if (!nombre && !contraseña) {
+    return res.status(400).json({ error: 'Nada que actualizar' });
+  }
+
+  const updates = [];
+  const values = [];
+
+  if (nombre) {
+    updates.push('nombre = ?');
+    values.push(nombre);
+  }
+
+  if (contraseña) {
+    const hashedPassword = await bcrypt.hash(contraseña, 10);
+    updates.push('contraseña = ?');
+    values.push(hashedPassword);
+  }
+
+  values.push(userId);
+
+  try {
+    await pool.query(
+      `UPDATE usuarios SET ${updates.join(', ')} WHERE id = ?`,
+      values
+    );
+    res.status(200).json({ message: 'Perfil actualizado correctamente' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al actualizar perfil' });
   }
 };
