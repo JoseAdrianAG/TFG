@@ -122,17 +122,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        _errorMessage!,
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: _logout,
-                        child: const Text('Volver al inicio de sesión'),
-                      ),
-                    ],
+                    children: [],
                   ),
                 )
               : Padding(

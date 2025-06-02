@@ -59,19 +59,29 @@ router.post('/', authenticateToken, async (req, res) => {
 
 // Eliminar favorito
 router.delete('/', authenticateToken, async (req, res) => {
-  const usuario_id = req.user.id;
-  const { restaurante_id } = req.body;
-  const nombre_restaurante = req.body.nombre_restaurante;
+  const usuarioId = req.query.usuario_id;
+  const restauranteId = req.query.restaurante_id;
+
+  if (!usuarioId || !restauranteId) {
+    return res.status(400).json({ error: 'Datos incompletos' });
+  }
+
   try {
-    await pool.query(
-      'DELETE FROM favoritos WHERE usuario_id = ? AND restaurante_id = ? AND nombre_restaurante = ?',
-      [usuario_id, restaurante_id, nombre_restaurante]
+    const [result] = await pool.query(
+      'DELETE FROM favoritos WHERE usuario_id = ? AND restaurante_id = ?',
+      [usuarioId, restauranteId]
     );
-    res.status(200).json({ mensaje: 'Favorito eliminado' });
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ mensaje: 'Favorito no encontrado' });
+    }
+
+    res.status(200).json({ mensaje: 'Favorito eliminado correctamente' });
   } catch (error) {
     console.error('Error al eliminar favorito:', error);
     res.status(500).json({ mensaje: 'Error al eliminar favorito' });
   }
 });
+
 
 export default router;

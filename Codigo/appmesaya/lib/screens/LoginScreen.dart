@@ -28,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    _resetForm();
     _checkAuthentication();
   }
 
@@ -103,9 +104,6 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       return;
     }
-    setState(() {
-      _errorMessage = null;
-    });
 
     try {
       final response = await _makePostRequest(url, loginData);
@@ -170,6 +168,14 @@ class _LoginScreenState extends State<LoginScreen> {
     } finally {
       client.close();
     }
+  }
+
+  void _resetForm() {
+    _usernameController.clear();
+    _passwordController.clear();
+    setState(() {
+      _errorMessage = null;
+    });
   }
 
   @override
@@ -261,7 +267,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         const RegistroScreen()),
-                              );
+                              ).then((_) {
+                                if (mounted) {
+                                  _resetForm();
+                                }
+                              });
                             },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,

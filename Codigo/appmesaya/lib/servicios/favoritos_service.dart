@@ -49,18 +49,24 @@ class FavoritosService {
           ((X509Certificate cert, String host, int port) => true);
 
     try {
-      final url = Uri.parse('https://10.0.2.2:3000/favoritos');
+      final url = agregar
+          ? Uri.parse('https://10.0.2.2:3000/favoritos')
+          : Uri.parse(
+              'https://10.0.2.2:3000/favoritos?usuario_id=$usuarioId&restaurante_id=$restauranteId');
+
       final request =
           agregar ? await client.postUrl(url) : await client.deleteUrl(url);
 
       request.headers.set('Authorization', 'Bearer $token');
       request.headers.set('Content-Type', 'application/json');
 
-      request.write(json.encode({
-        'usuario_id': usuarioId,
-        'restaurante_id': restauranteId,
-        'nombre_restaurante': nombreRestaurante,
-      }));
+      if (agregar) {
+        request.write(json.encode({
+          'usuario_id': usuarioId,
+          'restaurante_id': restauranteId,
+          'nombre_restaurante': nombreRestaurante,
+        }));
+      }
 
       final response = await request.close();
 
